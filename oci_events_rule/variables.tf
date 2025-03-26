@@ -1,9 +1,11 @@
 variable "rule_condition" {
   description = "event types for rule conditions"
+  type = string
 }
 
 variable "action_type" {
   description = "action in response to event trigger"
+  type = string
 }
 
 variable "tenancy_ocid" {
