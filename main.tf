@@ -37,7 +37,7 @@ resource "oci_events_rule" "Event_Rules" {
                         action_type = var.action_type
                         description = "send notification to admin"
                         is_enabled = true
-                        topic_id = oci_ons_notification_topic.admins_ons_topic.id
+                        topic_id = oci_ons_notification_topic.admin_ons_topic.id
 
                         }
                 }
