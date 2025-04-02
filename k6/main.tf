@@ -101,6 +101,61 @@ resource "oci_core_security_list" "test_security_list" {
 
 
 #create flask app instance
+resource "oci_core_instance" "flask_instance" {
+  availability_domain = var.availability_domain
+  compartment_id      = var.compartment_ocid
+  display_name        = "FlaskAppServer"
+  shape               = var.instance_shape
+
+  create_vnic_details {
+    subnet_id        = oci_core_subnet.public_subnet.id
+    assign_public_ip = true
+  }
+
+  source_details {
+    source_type = "image"
+    source_id   = data.oci_core_images.oracle_linux.images[0].id
+  }
+
+  metadata = {
+    ssh_authorized_keys = var.ssh_public_key
+    user_data = base64encode(<<-EOF
+      #!/bin/bash
+      # Update and install required packages
+      dnf update -y
+      dnf install -y python3 python3-pip git
+
+      # Install Flask
+      pip3 install flask gunicorn
+
+      # Create a sample Flask app
+      mkdir -p /opt/flask-app
+      cat > /opt/flask-app/app.py <<'EOL'
+      from flask import Flask, jsonify
+      import random
+      import time
+
+      app = Flask(__name__)
+
+      @app.route('/')
+      def hello():
+          return jsonify({"message": "Hello World!"})
+
+      @app.route('/metrics')
+      def metrics():
+          # Generate some random metrics for Grafana to visualize
+          cpu = random.uniform(0, 100)
+          memory = random.uniform(0, 100)
+          return jsonify({
+              "cpu_usage": cpu,
+              "memory_usage": memory
+          })
+
+      if __name__ == '__main__':
+          app.run(host='0.0.0.0', port=5000)
+      EOL }
+}
+
 #create grafana instance
 
 terraform {
