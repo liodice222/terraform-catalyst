@@ -68,8 +68,40 @@ resource "oci_core_subnet" "public_subnet" {
 }
 
 #create security lists
+resource "oci_core_security_list" "test_security_list" {
+    #Required
+    compartment_id = var.compartment_id
+    vcn_id = oci_core_vcn.k6_vcn.id
+    # allow all outgoing traffic 
+    egress_security_rules {
+        destination = "0.00.0/0"
+        protocol = "all"
+        }
+    #allow ssh connections port 22
+    ingress_security_rules {
+        #Required
+        protocol = "6"
+        source = "0.0.0.0/0"
+
+        tcp_options {
+        min = 22
+        max = 22
+        }
+    #open port 5000 to connect to Flask app
+    ingress_security_rules {
+        #Required
+        protocol = "6"
+        source = "0.0.0.0/0"
+
+        tcp_options {
+        min = 5000
+        max = 5000
+        }
+}
 
 
+#create flask app instance
+#create grafana instance
 
 terraform {
   required_providers {
