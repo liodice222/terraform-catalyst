@@ -35,8 +35,8 @@ Other Resources to consider for Event Services:
 	goldengate.createdeployment.begin
 	
 	- Networking Services
-	Create Internet Gateway 
-	Instance pools
+	- Create Internet Gateway 
+	- Instance pools
 	
 Resources not included in Oracle Event Services
 	- BM Instances - functions
@@ -74,10 +74,8 @@ https://docs.oracle.com/en-us/iaas/data-integration/using/creating-a-workspace.h
 Next Steps
 
 Implementation: 
-Determine appropriate event types and notification topic and admins 
-	- Configure Notification Topic, subscriptions to admin and Event rules
-		○ Confirm which event services to include 
-	- Consider utilizing OCI Functions for:
+- Confirm Event Services
+- Determine appropriate OCI Functions
 
 		
 		
